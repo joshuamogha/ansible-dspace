@@ -1,9 +1,6 @@
 # Ansible playbook for DSpace deployment
 
-It seems like I've been setting up a lot of DSpace servers lately, so I wanted to automate the process somewhat.  This is a rough first attempt at getting DSpace deployed by ansible.  It's not as tightly integrated as the [vagrant-dspace](https://github.com/DSpace/vagrant-dspace) stuff, which uses puppet and vagrant to quickly spin up a development-ready DSpace VM, but it "works".
-
-It's pretty much geared towards my own environment, but I wanted to publish it to get more exposure to it; send me pull requests so we can make it better, more reliable, etc.
-
+The aim of this repo is to automate dspace deployment, configuration and cutomization in one go. It is more specific to what we want it to be for R&D institution in Tanzania. 
 
 ## Assumptions
 A few assumptions are made:
@@ -14,6 +11,27 @@ A few assumptions are made:
 - The target server will use Apache httpd in front of Tomcat (reverse proxy)
 - The target server will use Oracle JDK 1.7 instead of OpenJDK
 
+## Pre-requisite
+
+This are pre installation packages.
+
+- thi 
+
+## Installation 
+
+This is what is installed.
+
+
+
+## Configuration 
+
+This is what is going to be configured ..
+
+
+
+## Customization 
+
+This is customised based on the university.
 
 ## Usage
 Edit the `hosts` and `host_vars` appropriately, and then test to see if ansible can reach your host:
@@ -23,8 +41,6 @@ Edit the `hosts` and `host_vars` appropriately, and then test to see if ansible 
 Then try to run the playbook:
 
     ansible-playbook -i hosts dspace.yml -K
-
-In my experience it takes 2+ runs to get past the `ant fresh_install` step (not sure why).
 
 
 ## To do

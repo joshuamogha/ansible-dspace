@@ -1,0 +1,5 @@
+---
+# dspace directories
+
+base_directory: "/dspace"
+dspace_base_directory: "/dspace/dspace_build" 

@@ -1,0 +1,50 @@
+---
+# download and unarchive dspace package.
+
+- name: Download Dspace binaries
+  get_url:
+    url: {{ dspace_download_server }}
+    dest: {{ dspace_base_dir }}
+  register: bin_files
+
+- name: Extrating the Dspace files
+  unarchive:
+    src: {{ dspace_base_dir }}/{{ item }}
+    dest: {{ dpsce_base_dir }}
+    copy: no
+  with_items:
+  - "{{ bin_files.stdout }}"
+
+
+  #Maven install
+  - name: dspace | clone
+    git: repo=https://github.com/ilri/DSpace.git dest={{dspace_source_dir}} version={{git_branch}} depth=1
+    tags: dspace
+
+  - name: dspace | config
+    template: src=templates/build.properties.j2 dest={{dspace_source_dir}}/{{apache_server_hostname}}.properties
+    tags: dspace
+
+  - name: dspace | clean
+    command: mvn clean chdir={{dspace_source_dir}}
+    tags: dspace
+
+  - name: dspace | build
+    command: mvn package -Denv={{apache_server_hostname}} chdir={{dspace_source_dir}}
+    tags: dspace
+
+  - name: dspace | perform fresh install
+    command: /opt/apache-ant-1.9.2/bin/ant fresh_install chdir={{dspace_source_dir}}/dspace/target/dspace-3.1-build creates={{dspace_install_dir}}/webapps/xmlui
+    tags: dspace
+
+  - name: dspace | set up tomcat ROOT context
+    shell: echo '<Context docBase="{{dspace_install_dir}}/webapps/xmlui"/>' > /var/lib/tomcat7/conf/Catalina/localhost/ROOT.xml
+    tags: dspace
+    
+  - name: dspace | set up other tomcat contexts
+    shell: echo '<Context docBase="{{dspace_install_dir}}/webapps/{{item}}"/>' > /var/lib/tomcat7/conf/Catalina/localhost/{{item}}.xml
+    with_items: 
+      - solr
+      - jspui
+      - oai
+    tags: dspace

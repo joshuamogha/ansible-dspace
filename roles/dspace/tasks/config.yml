@@ -1,0 +1,4 @@
+---
+
+- name: copy dspace files to tomcat
+  command: cp -r /dspace/webapps/*  /opt/tomcat/webapps

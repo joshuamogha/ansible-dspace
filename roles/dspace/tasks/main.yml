@@ -1,1 +1,13 @@
 ---
+- include_tasks: dspace_env.yml
+  tags:
+    - dspace
+    
+  
+- include_tasks: dspace_install.yml
+  tags:
+    - dspace
+
+- include_tasks:  config.yml
+#  tags:
+#    - dspaceinclude_tasks

@@ -1,0 +1,43 @@
+---
+
+#dspace installation 
+- name: create group dspace 
+  become: yes
+  group: # Empty by default, here we give it some groups
+    name: dspace
+
+
+- name: Create a login user
+  become: yes
+  user:
+    name: dspace
+    password: dspace
+    group: dspace
+     #- sudo
+    state: present
+    shell: /bin/bash       # Defaults to /bin/bash
+    system: no             # Defaults to no
+    createhome: yes        # Defaults to yes
+    home: /home/dspace  # Defaults to /home/<username>
+   
+- name: Creates dspace directory
+  become: yes
+  file:
+    path: /dspace
+    state: directory
+    owner: dspace
+    group: dspace
+    mode: 0775
+    #with_items: "{{ directories_dir }}"
+    
+- name: Creates dspace directory
+  become: yes
+  file:
+    path: /dspace/dspace_build
+    state: directory
+    owner: dspace
+    group: dspace
+    mode: 0775  
+
+      
+   

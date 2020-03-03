@@ -1,14 +1,17 @@
 ---
-- name: Ensure tomcat_java_home is defined
+#java home definition
+- name: tomcat | Ensure tomcat_java_home is defined
   fail: msg="You must define the tomcat_java_home variable"
   when: tomcat_java_home is not defined
+  tags: tomcat
 
-- name: Create tomcat group
+- name: tomcat | Create tomcat group
   group:
     name: tomcat
     system: true
+  tags: tomcat
 
-- name: Create tomcat user
+- name: tomcat | Create tomcat user
   user:
     name: tomcat
     group: tomcat
@@ -17,16 +20,18 @@
     system: true
     createhome: true
     move_home: true
+  tags: tomcat
 
-- name: Download and extract Tomcat to tomcat home directory
+- name: tomcat | Download and extract Tomcat to tomcat home directory 
   unarchive:
     src: "{{tomcat_archive_url}}/{{tomcat_archive_name}}{{tomcat_archive_name_ext}}"
     dest: "{{tomcat_home_path}}"
     remote_src: true
     group: tomcat
     creates: "{{tomcat_archive_install_path}}"
+  tags: tomcat
 
-- name: Make the tomcat user the owner of the webapps, work, temp, and logs directories
+- name: tomcat | Make the tomcat user the owner of the webapps, work, temp, and logs directories
   file:
     path: "{{tomcat_archive_install_path}}/{{item}}"
     owner: tomcat
@@ -37,44 +42,51 @@
     - work
     - temp
     - logs
+  tags: tomcat
 
-- name: Grant Tomcat group read access to the conf directory
+- name: tomcat | Grant Tomcat group read access to the conf directory
   file:
     path: "{{tomcat_archive_install_path}}/conf"
     state: directory
     mode: "g+r"
     recurse: true
+  tags: tomcat
 
-- name: Grant Tomcat group execute access to the conf directory itself
+- name: tomcat | Grant Tomcat group execute access to the conf directory itself
   file:
     path: "{{tomcat_archive_install_path}}/conf"
     state: directory
     mode: "g+x"
+  tags: tomcat
 
-- name: Create tomcat-users.xml
+- name: tomcat | Create tomcat-users.xml
   template:
     src: templates/tomcat-users.xml
     dest: "{{tomcat_archive_install_path}}/conf/tomcat-users.xml"
   notify: restart tomcat
+  tags: tomcat
 
-- name: Symlink Tomcat to current version
+- name: tomcat | Symlink Tomcat to current version
   file:
     src: "{{tomcat_archive_install_path}}"
     dest: "{{tomcat_install_link}}"
     state: link
   notify: restart tomcat
+  tags: tomcat
 
-- name: Create systemd service script for Tomcat
+- name: tomcat | Create systemd service script for Tomcat
   template:
     src: "templates/tomcat.service"
     dest: "/etc/systemd/system/tomcat.service"
   notify: restart tomcat
+  tags: tomcat
 
-- name: Start and enable Tomcat service
+- name: tomcat | Start and enable Tomcat service
   become: yes
   service:
     name: tomcat
     state: started
     enabled: yes
     daemon_reload: yes
+  tags: tomcat
     

@@ -1,8 +1,0 @@
----
-#- name: Ensure PostgreSQL users are present.
-- name: Create rails user, set MD5-hashed password, grant priv 
-  become_user: postgres
-  become: yes
-  postgresql_user:
-    name: postgres
-    password: md59543f1d82624df2b31672ec0f7050460

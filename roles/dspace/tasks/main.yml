@@ -1,13 +1,18 @@
 ---
-- include_tasks: dspace_env.yml
+- include_tasks: prerequsite.yml
   tags:
-    - dspace
-    
-  
-- include_tasks: dspace_install.yml
+    - deps  
+- include_tasks: postgres.yml
+  tags:
+    - postgres
+- include_tasks: tomcat-7.yml
+  tags:
+    - tomcat
+- include_tasks: dspace.yml
   tags:
     - dspace
 
-- include_tasks:  config.yml
-#  tags:
-#    - dspaceinclude_tasks
+#- include_tasks: customization.yml
+
+#- include_tasks: localhost.yml
+  

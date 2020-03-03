@@ -1,9 +1,9 @@
 inventory_name:
     hosts:
-       41.93.32.104:
+       10.10.2.58:
           ansible_connection: ssh
-          ansible_user: coded
+          ansible_user: mgaya
           ansible_ssh_pass: 
-          ansible_sudo_pass: hiphop 
+          ansible_sudo_pass: mgaya 
           ansible_become: yes
           ansible_become_method: sudo
